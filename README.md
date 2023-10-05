@@ -12,7 +12,7 @@ Fetches metadata from [kinopoisk.ru](https://www.kinopoisk.ru). This site is pop
 
 ## Установка
 
-Администрирование - Панель - Расширенное - Плагины - вкладка Репозитории - добавить адрес [https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/manifest.json](https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/manifest/manifest.json).
+Администрирование - Панель - Расширенное - Плагины - вкладка Репозитории - добавить адрес [https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/manifest/manifest.json](https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/manifest/manifest.json).
 
 После этого на вкладке Каталог найти "КиноПоиск" (раздел Метаданные) и установить.
 
