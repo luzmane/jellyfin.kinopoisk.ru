@@ -6,6 +6,7 @@
     "overview": "Pull film/serial metadata from kinopoisk.ru",
     "owner": "luzmane",
     "category": "Metadata",
+    "imageUrl": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/thumb.png",
     "versions": [
       {
         "version": "1.0.0.0",
