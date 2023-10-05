@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <DllVersion>1.0.0.0</DllVersion>
+    <JellyfinVersion>10.8.11</JellyfinVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Jellyfin.Plugin.KinopoiskRu</RootNamespace>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+
+    <Version>$(DllVersion)</Version>
+    <AssemblyVersion>$(DllVersion)</AssemblyVersion>
+    <FileVersion>$(DllVersion)</FileVersion>
+    <Authors>Evgeniy Luzman</Authors>
+    <Copyright>Copyright (c) 2023 Evgeniy Luzman</Copyright>
+    <Description>Jellyfin plugin to update metadata from kinopoisk.ru</Description>
+    <PackageId>Jellyfin.Plugin.KinopoiskRu</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>jellyfin kinopoisk</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../RELEASE-NOTES.txt"))</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/luzmane/jellyfin.kinopoisk.ru</RepositoryUrl>
+    <Title>Jellyfin plugin to update metadata from kinopoisk.ru</Title>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Controller" Version="$(JellyfinVersion)" />
+    <PackageReference Include="Jellyfin.Model" Version="$(JellyfinVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+  </ItemGroup>
+
+  <!-- <ItemGroup>
+    <PackageReference Include="SerilogAnalyzer" Version="0.15.0" PrivateAssets="All" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="All" />
+    <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31"
+      PrivateAssets="All" />
+  </ItemGroup> -->
+
+  <ItemGroup>
+    <None Remove="Configuration/kinopoiskru.html" />
+    <None Remove="Configuration/kinopoiskru.js" />
+    <EmbeddedResource Include="Configuration/kinopoiskru.html" />
+    <EmbeddedResource Include="Configuration/kinopoiskru.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Jellyfin.Plugin.KinopoiskRu.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>

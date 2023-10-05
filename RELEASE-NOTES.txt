@@ -1,0 +1,4 @@
+v.1.0.0
+- Initial release
+- Support data load of movie, series and staff
+- Detection of КиноПоиск Id in file name

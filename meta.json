@@ -1,0 +1,13 @@
+{
+  "category": "Metadata",
+  "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt",
+  "description": "Fetch metadata from kinopoisk.ru using 3rd parties API",
+  "guid": "0417364b-5a93-4ad0-a5f0-b8756957cf80",
+  "imagePath": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/thumb.png",
+  "name": "Kinopoisk",
+  "overview": "Fetch metadata from kinopoisk.ru using 3rd parties API",
+  "owner": "luzmane",
+  "targetAbi": "0.0.0.0",
+  "timestamp": "0000-00-00T00:00:00.0000000Z",
+  "version": "0.0.0.0"
+}

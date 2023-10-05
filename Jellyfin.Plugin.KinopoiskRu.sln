@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.KinopoiskRu", "Jellyfin.Plugin.KinopoiskRu\Jellyfin.Plugin.KinopoiskRu.csproj", "{813C7FFF-2FFC-4DDB-B651-4B07C77D5481}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.KinopoiskRu.Tests", "Jellyfin.Plugin.KinopoiskRu.Tests\Jellyfin.Plugin.KinopoiskRu.Tests.csproj", "{80FBF339-74F0-4BC8-9368-129FF1D7B8D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{813C7FFF-2FFC-4DDB-B651-4B07C77D5481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{813C7FFF-2FFC-4DDB-B651-4B07C77D5481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{813C7FFF-2FFC-4DDB-B651-4B07C77D5481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{813C7FFF-2FFC-4DDB-B651-4B07C77D5481}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80FBF339-74F0-4BC8-9368-129FF1D7B8D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80FBF339-74F0-4BC8-9368-129FF1D7B8D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80FBF339-74F0-4BC8-9368-129FF1D7B8D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80FBF339-74F0-4BC8-9368-129FF1D7B8D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

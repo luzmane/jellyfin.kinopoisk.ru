@@ -1,0 +1,119 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          path: main
+
+      - name: Build
+        run: dotnet build --configuration Release
+        working-directory: ./main
+
+      - name: Update meta.json
+        id: update_meta
+        working-directory: ./main
+        run: |
+          # version
+          tag=$(git describe --tags --always)
+          tag="${tag:2}.0"
+          sed -i "/version/s/0.0.0.0/${tag}/" ./meta.json
+          echo "tag=${tag}" >> $GITHUB_OUTPUT
+
+          # timestamp
+          timestamp=$(date +'%Y-%m-%d'T'%H:%M:%S.0000000Z')
+          sed -i "/timestamp/s/0000-00-00T00:00:00.0000000Z/${timestamp}/" ./meta.json
+          echo "timestamp=${timestamp}" >> $GITHUB_OUTPUT
+
+          # targetAbi
+          targetAbi=$(awk -F'[<>]' '/<JellyfinVersion/ {print $3}' ./Jellyfin.Plugin.KinopoiskRu/Jellyfin.Plugin.KinopoiskRu.csproj)
+          targetAbi="${targetAbi}.0"
+          sed -i "/targetAbi/s/0.0.0.0/${targetAbi}/" ./meta.json
+          echo "target_abi=${targetAbi}" >> $GITHUB_OUTPUT
+
+      - name: Package dll
+        id: create_package
+        shell: bash
+        working-directory: ./main
+        run: |
+          tag=$(git describe --tags --always)
+          release_name="KinopoiskRu-$tag"
+          7z a -tzip ${release_name}.zip ./Jellyfin.Plugin.KinopoiskRu/bin/Release/*/Jellyfin.Plugin.KinopoiskRu.dll ./meta.json
+          checksum=$(md5sum -b ${release_name}.zip | awk '{print $1}')
+          echo "release_name=${release_name}" >> $GITHUB_OUTPUT
+          echo "release_tag=${tag}" >> $GITHUB_OUTPUT
+          echo "filename=${release_name}.zip" >> $GITHUB_OUTPUT
+          echo "checksum=${checksum}" >> $GITHUB_OUTPUT
+
+      - name: Prepare release notes
+        id: release_notes
+        shell: bash
+        run: |
+          tags=$(awk '/^v.*/ {print}' ./main/RELEASE-NOTES.txt)
+          tags_array=($tags)
+          len=${#tags_array[@]}
+          if [ ${len} -ge 2 ]
+          then
+            prev_tag=${tags_array[1]};
+            notes=$(awk "BEGIN{ found=1 } /$prev_tag/{found=0}  {if (found) print }" ./main/RELEASE-NOTES.txt)
+            echo "${notes}" > ./main/RELEASE-NOTES.txt
+            echo "" >> ./main/RELEASE-NOTES.txt
+            echo "**Full Changelog**: https://github.com/luzmane/jellyfin.kinopoisk.ru/compare/${tags_array[1]}...${tags_array[0]}" >> ./main/RELEASE-NOTES.txt
+          fi
+
+      - name: Create release
+        uses: "softprops/action-gh-release@v1"
+        with:
+          files: ./main/${{ steps.create_package.outputs.filename }}
+          body_path: ./main/RELEASE-NOTES.txt
+          fail_on_unmatched_files: true
+          name: "${{ steps.create_package.outputs.release_name }}"
+          tag_name: "${{ steps.create_package.outputs.release_tag }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Checkout manifest
+        uses: actions/checkout@v4
+        with:
+          path: manifest
+          ref: manifest
+
+      - name: Update manifest.json
+        working-directory: ./manifest
+        shell: bash
+        run: |
+          # sourceUrl
+          sourceUrl="https://github.com/luzmane/jellyfin.kinopoisk.ru/releases/download/${{ steps.create_package.outputs.release_tag }}/${{ steps.create_package.outputs.filename }}"
+
+          json_template='{"version": "%s", "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt", "targetAbi": "%s", "sourceUrl": "%s", "checksum": "%s", "timestamp": "%s"}'
+          json_string=$(printf "$json_template" "${{ steps.update_meta.outputs.tag }}" "${{ steps.update_meta.outputs.target_abi }}" "$sourceUrl" "${{ steps.create_package.outputs.checksum }}" "${{ steps.update_meta.outputs.timestamp }}" )
+          jq --argjson json_string "$json_string" '.[0].versions = ( [ $json_string ] + .[0].versions) ' manifest.json  > tmp.json
+          mv tmp.json manifest.json
+
+      - name: Commit and Push manifest.json
+        working-directory: ./manifest
+        run: |
+          # Stage the file, commit and push
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "GitHubActionsBot@users.noreply.github.com"
+
+          git add manifest.json
+          git commit -m "Update the manifest with '${{ steps.create_package.outputs.release_tag }}' release"
+          git push origin

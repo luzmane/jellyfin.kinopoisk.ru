@@ -1,0 +1,89 @@
+{
+  // Paths and plugin name are configured in settings.json
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // A chain task - build the plugin, then copy it to your
+      // jellyfin server's plugin directory
+      "label": "build-and-copy",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "build",
+        "remove-plugin-dir",
+        "make-plugin-dir",
+        "copy-dll",
+        "update meta.json"
+      ]
+    },
+    {
+      // Build the plugin
+      "label": "build",
+      "command": "dotnet",
+      "type": "shell",
+      "args": [
+        "publish",
+        "${workspaceFolder}/${config:pluginName}.sln",
+        "/property:GenerateFullPaths=true",
+        //"/property:RestoreSources=MyLocalNuget",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      // remove old plugin if exists
+      "label": "remove-plugin-dir",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "${config:jellyfinDataDir}/plugins/${config:pluginName}/"
+      ]
+    },
+    {
+      // Ensure the plugin directory exists before trying to use it
+      "label": "make-plugin-dir",
+      "type": "shell",
+      "command": "mkdir",
+      "args": [
+        "${config:jellyfinDataDir}/plugins/${config:pluginName}/"
+      ]
+    },
+    {
+      // Copy the plugin dll to the jellyfin plugin install path
+      // This command copies every .dll from the build directory to the plugin dir
+      // Usually, you probablly only need ${config:pluginName}.dll
+      // But some plugins may bundle extra requirements
+      "label": "copy-dll",
+      "type": "shell",
+      "command": "cp",
+      "args": [
+        "./${config:pluginName}/bin/Debug/net6.0/publish/${config:pluginName}.dll",
+        "./${config:pluginName}/bin/Debug/net6.0/publish/${config:pluginName}.pdb",
+        "./meta.json",
+        "./thumb.png",
+        "${config:jellyfinDataDir}/plugins/${config:pluginName}/"
+      ]
+    },
+    {
+      "label": "update meta.json",
+      "type": "shell",
+      "command": "sed",
+      "args": [
+        "-i",
+        "-e",
+        "'s#https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master#${config:jellyfinDataDir}/plugins/${config:pluginName}#'",
+        "-e",
+        "'/version/s/0.0.0.0/1.0.0.0/'",
+        "-e",
+        "'/timestamp/s/0000-00-00T00:00:00.0000000Z/2023-10-01T00:00:00.0000000Z/'",
+        "-e",
+        "'/targetAbi/s/0.0.0.0/10.8.11.0/'",
+        "${config:jellyfinDataDir}/plugins/${config:pluginName}/meta.json"
+      ]
+    },
+  ]
+}

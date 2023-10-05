@@ -1,0 +1,28 @@
+{
+    // Paths and plugin names are configured in settings.json
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "coreclr",
+            "name": "Launch",
+            "request": "launch",
+            "preLaunchTask": "build-and-copy",
+            "program": "${config:jellyfinDir}/jellyfin",
+            "args": [
+                "--webdir=/home/alkid/ws/arc_projects/jellyfin/server/web",
+                "--ffmpeg=/usr/lib/jellyfin-ffmpeg/ffmpeg"
+            ],
+            "cwd": "${config:jellyfinDir}",
+            "env": {
+                "JELLYFIN_DATA_DIR": "${config:jellyfinDataDir}",
+                "JELLYFIN_CONFIG_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/config",
+                "JELLYFIN_LOG_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/logs",
+                "JELLYFIN_CACHE_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/cache",
+
+                //"JELLYFIN_WEB_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/web",
+                //"JELLYFIN_WEB_OPT": "--webdir=/home/alkid/ws/arc_projects/jellyfin/server/web",
+                //"JELLYFIN_FFMPEG_OPT": "--ffmpeg=/usr/lib/jellyfin-ffmpeg/ffmpeg",
+            }
+        }
+    ]
+}

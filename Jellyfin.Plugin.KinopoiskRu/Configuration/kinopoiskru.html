@@ -1,0 +1,58 @@
+﻿<div id="kinopoiskConfigPage" data-role="page" class="page type-interior pluginConfigurationPage"
+  data-controller="__plugin/kinopoiskrujs" data-title="Кинопоиск"
+  data-require="emby-input,emby-button,emby-radio,emby-checkbox">
+  <div data-role="content">
+    <div class="content-primary">
+      <h1>Кинопоиск</h1>
+      <form id="kinopoiskConfigForm">
+        <div class="paperList checkboxList checkboxList-paperList">
+          <h3 class="checkboxListLabel">Настройки токена</h3>
+          <div class="inputContainer">
+            <input is="emby-input" type="text" id="txtToken" autocomplete="off" label="Токен" />
+          </div>
+          <div class="inputContainer">
+            <label>
+              <input is="emby-radio" type="radio" name="radioAPI" class="radioTabButton" id="kinopoiskDev"
+                value="kinopoisk.dev">
+              <span class="radioButtonLabel">kinopoisk.dev. <a is="emby-linkbutton" class="button-link" target="_blank"
+                  href="https://kinopoisk.dev">Брать токен тут</a></span>
+            </label>
+          </div>
+          <div class="inputContainer">
+            <label>
+              <input is="emby-radio" type="radio" name="radioAPI" class="radioTabButton" id="kinopoiskUnofficial"
+                value="kinopoiskapiunofficial.tech">
+              <span class="radioButtonLabel">kinopoiskapiunofficial.tech <a is="emby-linkbutton" class="button-link"
+                  target="_blank" href="https://kinopoiskapiunofficial.tech">Брать токен тут</a></span>
+            </label>
+          </div>
+        </div>
+        <div class="paperList checkboxList checkboxList-paperList kinopoiskDevOnly" style="display: none;">
+          <h3 class="checkboxListLabel">Настройки группирования приквелов и сиквелов</h3>
+          <label class="checkboxContainer">
+            <input is="emby-checkbox" type="checkbox" id="chkCreateSeqCollections">
+            <span class="checkboxButtonLabel">Группировать приквелы и сиквелы фильмов</span>
+          </label>
+        </div>
+        <div class="paperList checkboxList checkboxList-paperList kinopoiskDevOnly" style="display: none;">
+          <h3 class="checkboxListLabel">Настройки создания коллекции Топ 250</h3>
+          <label class="checkboxContainer">
+            <input is="emby-checkbox" type="checkbox" id="chkTop250InOneLib">
+            <span class="checkboxButtonLabel">Добавлять фильмы\серии из всех медиатек</span>
+          </label>
+          <div class="inputContainer">
+            <input is="emby-input" type="text" id="top250MovieName" autocomplete="off"
+              label="Название для коллекции Топ 250 фильмов" />
+          </div>
+          <div class="inputContainer">
+            <input is="emby-input" type="text" id="top250SeriesName" autocomplete="off"
+              label="Название для коллекции Топ 250 сериалов" />
+          </div>
+        </div>
+        <div>
+          <button is="emby-button" type="submit" class="raised button-submit block"><span>Сохранить</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+name: "Test Report"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "master" ]
+  workflow_dispatch:
+  # TODO: uncomment me
+  # schedule:
+  #   - cron: '45 11 9 * *'
+
+jobs:
+  test:
+    name: Test Report
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      checks: write
+
+    steps:
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.x
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build projects
+      run: dotnet build
+    
+    - name: Run tests
+      env:
+        KINOPOISK_DEV_TOKEN: ${{ secrets.KINOPOISK_DEV_TOKEN }}
+        KINOPOISK_UNOFFICIAL_TOKEN: ${{ secrets.KINOPOISK_UNOFFICIAL_TOKEN }}
+      run: dotnet test --logger "trx;LogFileName=test-results.trx"
+    
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      with: 
+        name: 'Test report'
+        path: 'Jellyfin.Plugin.KinopoiskRu.Tests/TestResults/test-results.trx'
+        reporter: 'dotnet-trx'
