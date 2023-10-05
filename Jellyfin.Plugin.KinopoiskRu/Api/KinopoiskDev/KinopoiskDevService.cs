@@ -246,10 +246,10 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
             .ToList()
             .ForEach(j => toReturn.AddTrailerUrl(j));
 
-        if (_pluginInstance.Configuration.NeedToCreateSequenceCollection() && movie.SequelsAndPrequels.Any())
-        {
-            // await AddMovieToCollection(toReturn, movie, cancellationToken).ConfigureAwait(false);
-        }
+        // if (_pluginInstance.Configuration.NeedToCreateSequenceCollection() && movie.SequelsAndPrequels.Any())
+        // {
+        //     await AddMovieToCollection(toReturn, movie, cancellationToken).ConfigureAwait(false);
+        // }
 
         return Task.FromResult(toReturn);
     }
@@ -441,10 +441,10 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
             .ToList()
             .ForEach(j => toReturn.AddTrailerUrl(j));
 
-        if (_pluginInstance.Configuration.NeedToCreateSequenceCollection() && series.SequelsAndPrequels.Any())
-        {
-            // await AddMovieToCollection(toReturn, series, cancellationToken).ConfigureAwait(false);
-        }
+        // if (_pluginInstance.Configuration.NeedToCreateSequenceCollection() && series.SequelsAndPrequels.Any())
+        // {
+        //     await AddMovieToCollection(toReturn, series, cancellationToken).ConfigureAwait(false);
+        // }
 
         return Task.FromResult(toReturn);
     }
