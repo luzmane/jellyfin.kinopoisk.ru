@@ -1,5 +1,5 @@
 {
-  // Paths and plugin name are configured in settings.json
+  // jellyfinBaseDir is configured in settings.json
   "version": "2.0.0",
   "tasks": [
     {
@@ -21,16 +21,9 @@
       "command": "dotnet",
       "type": "shell",
       "args": [
-        "publish",
-        "${workspaceFolder}/${config:pluginName}.sln",
-        "/property:GenerateFullPaths=true",
-        //"/property:RestoreSources=MyLocalNuget",
-        "/consoleloggerparameters:NoSummary"
+        "build"
       ],
       "group": "build",
-      "presentation": {
-        "reveal": "silent"
-      },
       "problemMatcher": "$msCompile"
     },
     {
@@ -40,7 +33,7 @@
       "command": "rm",
       "args": [
         "-rf",
-        "${config:jellyfinDataDir}/plugins/${config:pluginName}/"
+        "${config:jellyfinBaseDir}/data/plugins/Jellyfin.Plugin.KinopoiskRu/"
       ]
     },
     {
@@ -49,23 +42,20 @@
       "type": "shell",
       "command": "mkdir",
       "args": [
-        "${config:jellyfinDataDir}/plugins/${config:pluginName}/"
+        "${config:jellyfinBaseDir}/data/plugins/Jellyfin.Plugin.KinopoiskRu/"
       ]
     },
     {
-      // Copy the plugin dll to the jellyfin plugin install path
-      // This command copies every .dll from the build directory to the plugin dir
-      // Usually, you probablly only need ${config:pluginName}.dll
-      // But some plugins may bundle extra requirements
+      // Copy the plugin to the jellyfin plugin install path
       "label": "copy-dll",
       "type": "shell",
       "command": "cp",
       "args": [
-        "./${config:pluginName}/bin/Debug/net6.0/publish/${config:pluginName}.dll",
-        "./${config:pluginName}/bin/Debug/net6.0/publish/${config:pluginName}.pdb",
+        "./Jellyfin.Plugin.KinopoiskRu/bin/Debug/*/Jellyfin.Plugin.KinopoiskRu.dll",
+        "./Jellyfin.Plugin.KinopoiskRu/bin/Debug/*/Jellyfin.Plugin.KinopoiskRu.pdb",
         "./meta.json",
         "./thumb.png",
-        "${config:jellyfinDataDir}/plugins/${config:pluginName}/"
+        "${config:jellyfinBaseDir}/data/plugins/Jellyfin.Plugin.KinopoiskRu/"
       ]
     },
     {
@@ -75,14 +65,14 @@
       "args": [
         "-i",
         "-e",
-        "'s#https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master#${config:jellyfinDataDir}/plugins/${config:pluginName}#'",
+        "'s#https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master#${config:jellyfinBaseDir}/data/plugins/Jellyfin.Plugin.KinopoiskRu#'",
         "-e",
         "'/version/s/0.0.0.0/1.0.0.0/'",
         "-e",
         "'/timestamp/s/0000-00-00T00:00:00.0000000Z/2023-10-01T00:00:00.0000000Z/'",
         "-e",
         "'/targetAbi/s/0.0.0.0/10.8.11.0/'",
-        "${config:jellyfinDataDir}/plugins/${config:pluginName}/meta.json"
+        "${config:jellyfinBaseDir}/data/plugins/Jellyfin.Plugin.KinopoiskRu/meta.json"
       ]
     },
   ]

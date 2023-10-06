@@ -7,21 +7,17 @@
             "name": "Launch",
             "request": "launch",
             "preLaunchTask": "build-and-copy",
-            "program": "${config:jellyfinDir}/jellyfin",
+            "program": "${config:jellyfinBaseDir}/server/jellyfin",
             "args": [
-                "--webdir=/home/alkid/ws/arc_projects/jellyfin/server/web",
+                "--webdir=${config:jellyfinBaseDir}/web",
                 "--ffmpeg=/usr/lib/jellyfin-ffmpeg/ffmpeg"
             ],
-            "cwd": "${config:jellyfinDir}",
+            "cwd": "${config:jellyfinBaseDir}/server",
             "env": {
-                "JELLYFIN_DATA_DIR": "${config:jellyfinDataDir}",
-                "JELLYFIN_CONFIG_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/config",
-                "JELLYFIN_LOG_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/logs",
-                "JELLYFIN_CACHE_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/cache",
-
-                //"JELLYFIN_WEB_DIR": "/home/alkid/ws/arc_projects/jellyfin/server/web",
-                //"JELLYFIN_WEB_OPT": "--webdir=/home/alkid/ws/arc_projects/jellyfin/server/web",
-                //"JELLYFIN_FFMPEG_OPT": "--ffmpeg=/usr/lib/jellyfin-ffmpeg/ffmpeg",
+                "JELLYFIN_DATA_DIR": "${config:jellyfinBaseDir}/data",
+                "JELLYFIN_CONFIG_DIR": "${config:jellyfinBaseDir}/config",
+                "JELLYFIN_LOG_DIR": "${config:jellyfinBaseDir}/logs",
+                "JELLYFIN_CACHE_DIR": "${config:jellyfinBaseDir}/cache"
             }
         }
     ]

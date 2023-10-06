@@ -1,6 +1,4 @@
 {
     "dotnet.defaultSolution": "Jellyfin.Plugin.KinopoiskRu.sln",
-    "jellyfinDir": "/home/alkid/ws/arc_projects/jellyfin/server/server",
-    "jellyfinDataDir": "/home/alkid/ws/arc_projects/jellyfin/server/data",
-    "pluginName": "Jellyfin.Plugin.KinopoiskRu",
+    "jellyfinBaseDir": "/home/alkid/ws/arc_projects/jellyfin/server"
 }
