@@ -5,7 +5,6 @@ using Jellyfin.Data.Entities;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model.Movie;
 
 using MediaBrowser.Model.Activity;
-using MediaBrowser.Model.Entities;
 
 namespace Jellyfin.Plugin.KinopoiskRu.Helper;
 
@@ -20,7 +19,48 @@ internal sealed class KpHelper
 
     private static readonly Regex MultiWhitespaceRegex = new("\\s\\s+", RegexOptions.Compiled);
 
-    private static readonly Dictionary<string, string> PersonTypeMap = new();
+    private static readonly Dictionary<string, string> PersonTypeMap = new()
+    {
+        // KinopoiskDev
+        {"composer", "Композитор"},
+        {"designer", "Художник"},
+        {"director", "Режиссёр"},
+        {"editor", "Монтажёр"},
+        {"operator", "Оператор"},
+        {"producer", "Продюсер"},
+        {"voice_actor", "Актёр дубляжа"},
+        {"writer", "Сценарист"},
+        {"actor", "Актёр"},
+
+        {"композиторы", "Композитор"},
+        {"художники", "Художник"},
+        {"режиссеры", "Режиссёр"},
+        {"монтажеры", "Монтажёр"},
+        {"операторы", "Оператор"},
+        {"продюсеры", "Продюсер"},
+        {"актеры дубляжа", "Актёр дубляжа"},
+        {"редакторы", "Сценарист"},
+        {"актеры", "Актёр"},
+
+        // KinopoiskUnofficial
+        {"COMPOSER", "Композитор"},
+        {"DESIGN", "Художник"},
+        {"DIRECTOR", "Режиссёр"},
+        {"EDITOR", "Монтажёр"},
+        {"OPERATOR", "Оператор"},
+        {"PRODUCER", "Продюсер"},
+        {"WRITER", "Сценарист"},
+        {"ACTOR", "Актёр"},
+
+        {"Композиторы", "Композитор"},
+        {"Художники", "Художник"},
+        {"Режиссеры", "Режиссёр"},
+        {"Монтажеры", "Монтажёр"},
+        {"Операторы", "Оператор"},
+        {"Продюсеры", "Продюсер"},
+        {"Сценаристы", "Сценарист"},
+        {"Актеры", "Актёр"},
+    };
 
     internal static DateTime? GetPremierDate(KpPremiere? premiere)
     {
@@ -92,19 +132,18 @@ internal sealed class KpHelper
         return null;
     }
 
-    internal static string? GetPersonType(string? enProfesson)
+    internal static string? TranslatePersonType(string? enProfesson, string? profession)
     {
-        if (string.IsNullOrWhiteSpace(enProfesson))
+        string? toReturn = null;
+        if (enProfesson != null)
         {
-            return null;
+            toReturn = PersonTypeMap.GetValueOrDefault(enProfesson);
         }
-
-        if (!PersonTypeMap.Any())
+        if (toReturn == null && profession != null)
         {
-            PersonTypeMap.Add(PersonType.Actor.ToLowerInvariant(), PersonType.Actor);
+            toReturn = PersonTypeMap.GetValueOrDefault(profession);
         }
-
-        return PersonTypeMap.GetValueOrDefault(enProfesson);
+        return toReturn;
     }
 
     internal static async Task AddToActivityLog(IActivityManager activityManager, string overview, string shortOverview)

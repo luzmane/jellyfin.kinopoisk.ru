@@ -77,7 +77,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
         {
             _logger.LogInformation("Movie found by provider ID, Kinopoisk ID: '{MovieId}'", movie.Id);
             result.Item = await CreateMovieFromKpMovie(movie, cancellationToken).ConfigureAwait(false);
-            await UpdatePersonsList(result, movie.Persons, cancellationToken).ConfigureAwait(false);
+            UpdatePersonsList(result, movie.Persons, cancellationToken);
             result.HasMetadata = true;
             return result;
         }
@@ -95,7 +95,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
         }
 
         result.Item = await CreateMovieFromKpMovie(relevantMovies[0], cancellationToken).ConfigureAwait(false);
-        await UpdatePersonsList(result, relevantMovies[0].Persons, cancellationToken).ConfigureAwait(false);
+        UpdatePersonsList(result, relevantMovies[0].Persons, cancellationToken);
         result.HasMetadata = true;
         return result;
     }
@@ -275,7 +275,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
         {
             _logger.LogInformation("Series found by provider ID, Kinopoisk ID: '{ItemId}'", item.Id);
             result.Item = await CreateSeriesFromKpMovie(item, cancellationToken).ConfigureAwait(false);
-            await UpdatePersonsList(result, item.Persons, cancellationToken).ConfigureAwait(false);
+            UpdatePersonsList(result, item.Persons, cancellationToken);
             result.HasMetadata = true;
             return result;
         }
@@ -293,7 +293,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
         }
 
         result.Item = await CreateSeriesFromKpMovie(relevantSeries[0], cancellationToken).ConfigureAwait(false);
-        await UpdatePersonsList(result, relevantSeries[0].Persons, cancellationToken).ConfigureAwait(false);
+        UpdatePersonsList(result, relevantSeries[0].Persons, cancellationToken);
         result.HasMetadata = true;
         return result;
     }
@@ -814,7 +814,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
             : null;
     }
 
-    private async Task UpdatePersonsList<T>(MetadataResult<T> result, List<KpPersonMovie> persons, CancellationToken cancellationToken)
+    private void UpdatePersonsList<T>(MetadataResult<T> result, List<KpPersonMovie> persons, CancellationToken cancellationToken)
         where T : BaseItem
     {
         var seriesId = result.Item.GetProviderId(Plugin.PluginKey);
@@ -832,41 +832,27 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
 
         _logger.LogInformation("Updating persons list of the video with id '{SeriesId}'", seriesId);
         var movieName = result.Item.Name;
-        KpSearchResult<KpPerson> personsByVideoId = await _api.GetPersonsByMovieId(seriesId, cancellationToken).ConfigureAwait(false);
-        personsByVideoId.Docs
-            .ForEach(a =>
-                a.Movies?.RemoveAll(b =>
-                    b.Id.ToString(CultureInfo.InvariantCulture) != seriesId
-                        || string.IsNullOrWhiteSpace(b.Description)));
-
-        var idRoleDictionary = personsByVideoId.Docs
-            .ToDictionary(
-                c => c.Id,
-                c => c.Movies?.FirstOrDefault()?.Description);
-
-        var seriesName = result.Item.Name;
         foreach (KpPersonMovie kpPerson in persons)
         {
-            var personType = KpHelper.GetPersonType(kpPerson.EnProfession);
+            var personType = KpHelper.TranslatePersonType(kpPerson.EnProfession, kpPerson.Profession);
             var name = string.IsNullOrWhiteSpace(kpPerson.Name) ? kpPerson.EnName : kpPerson.Name;
             if (string.IsNullOrWhiteSpace(name))
             {
-                _logger.LogWarning("Skip adding staff with id '{KpPersonId}' as nameless to '{MovieName}'", kpPerson.Id, movieName);
+                _logger.LogInformation("Skip adding staff with id '{KpPersonId}' as nameless to '{MovieName}'", kpPerson.Id, movieName);
             }
-            else if (personType == null)
+            else if (string.IsNullOrWhiteSpace(personType))
             {
-                _logger.LogWarning("Skip adding {Name} as '{KpPersonEnProfession}' to {SeriesName}", name, kpPerson.EnProfession, seriesName);
+                _logger.LogInformation("Skip adding {Name} to {MovieName}', EnProfession: '{KpPersonEnProfession}', Profession: '{KpPersonProfession}'", name, movieName, kpPerson.EnProfession, kpPerson.Profession);
             }
             else
             {
-                _logger.LogDebug("Adding {Name} as '{PersonType}' to {SeriesName}", name, personType, seriesName);
-                _ = idRoleDictionary.TryGetValue(kpPerson.Id, out var role);
+                _logger.LogInformation("Adding {Name} as '{PersonType}' to {MovieName}", name, personType, movieName);
                 var person = new PersonInfo()
                 {
                     Name = name,
                     ImageUrl = kpPerson.Photo,
                     Type = personType,
-                    Role = role,
+                    Role = kpPerson.Description,
                 };
                 person.SetProviderId(Plugin.PluginKey, kpPerson.Id.ToString(CultureInfo.InvariantCulture));
 
@@ -884,7 +870,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
     // {
     //     _logger.LogInformation("Adding '{ToReturnName}' to collection", toReturn.Name);
 
-    //     // todo: fix me
+    //     // FIXME: fix me
     //     CollectionFolder? rootCollectionFolder = await JellyfinHelper.InsureCollectionLibraryFolder(_libraryManager, _log).ConfigureAwait(false);
     //     if (rootCollectionFolder == null)
     //     {
@@ -960,6 +946,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
 
     private static string? PrepareOverview(KpMovie movie)
     {
+        // TODO: remove tags, 0xa0 from overview
         var subj = "<br/><br/><b>Интересное:</b><br/>";
         StringBuilder sb = new(subj);
         movie.Facts?

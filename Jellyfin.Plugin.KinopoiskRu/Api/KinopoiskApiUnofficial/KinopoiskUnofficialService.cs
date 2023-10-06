@@ -740,20 +740,20 @@ internal sealed class KinopoiskUnofficialService : IKinopoiskRuService
     {
         foreach (KpFilmStaff staff in staffList)
         {
-            var personType = KpHelper.GetPersonType(staff.ProfessionKey);
             var name = string.IsNullOrWhiteSpace(staff.NameRu) ? staff.NameEn : staff.NameRu;
+            var personType = KpHelper.TranslatePersonType(staff.ProfessionKey, staff.ProfessionText);
             if (string.IsNullOrWhiteSpace(name))
             {
                 var staffId = staff.StaffId.ToString(CultureInfo.InvariantCulture);
-                _logger.LogWarning("Skip adding staff with id '{StaffId}' as nameless to '{MovieName}'", staffId, movieName);
+                _logger.LogInformation("Skip adding staff with id '{StaffId}' as nameless to '{MovieName}'", staffId, movieName);
             }
-            else if (personType == null)
+            else if (string.IsNullOrWhiteSpace(personType))
             {
-                _logger.LogWarning("Skip adding '{Name}' as '{StaffProfessionKey}' to '{MovieName}'", name, staff.ProfessionKey, movieName);
+                _logger.LogInformation("Skip adding {Name} to {MovieName}', ProfessionKey: '{StaffProfessionKey}', ProfessionText: '{StaffProfessionText}'", name, movieName, staff.ProfessionKey, staff.ProfessionText);
             }
             else
             {
-                _logger.LogDebug("Adding '{Name}' as '{PersonType}' to '{MovieName}'", name, personType, movieName);
+                _logger.LogInformation("Adding '{Name}' as '{PersonType}' to '{MovieName}'", name, personType, movieName);
                 var person = new PersonInfo()
                 {
                     Name = name,

@@ -16,4 +16,6 @@ internal sealed class KpFilmStaff
     public string? PosterUrl { get; set; }
 
     public string? ProfessionKey { get; set; }
+
+    public string? ProfessionText { get; set; }
 }
