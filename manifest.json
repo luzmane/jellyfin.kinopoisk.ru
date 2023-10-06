@@ -9,20 +9,20 @@
     "imageUrl": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/thumb.png",
     "versions": [
       {
-        "version": "1.1.0.0",
-        "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt",
-        "targetAbi": "10.8.11.0",
-        "sourceUrl": "https://github.com/luzmane/jellyfin.kinopoisk.ru/releases/download/v.1.1.0/KinopoiskRu-v.1.1.0.zip",
-        "checksum": "b364df04f1afb688e7834d23e05f3ff8",
-        "timestamp": "2023-10-06T20:52:12.0000000Z"
-      },
-      {
         "version": "1.0.0.0",
         "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt",
         "targetAbi": "10.8.11.0",
         "sourceUrl": "https://github.com/luzmane/jellyfin.kinopoisk.ru/releases/download/v.1.0.0/KinopoiskRu-v.1.0.0.zip",
         "checksum": "e7b04534eeaaaece8cc7a8c6f20e323d",
         "timestamp": "2023-10-05T16:42:44.0000000Z"
+      },
+      {
+        "version": "1.1.0.0",
+        "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt",
+        "targetAbi": "10.8.11.0",
+        "sourceUrl": "https://github.com/luzmane/jellyfin.kinopoisk.ru/releases/download/v.1.1.0/KinopoiskRu-v.1.1.0.zip",
+        "checksum": "b364df04f1afb688e7834d23e05f3ff8",
+        "timestamp": "2023-10-06T20:52:12.0000000Z"
       }
     ]
   }
