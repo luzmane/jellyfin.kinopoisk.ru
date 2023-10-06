@@ -11,7 +11,7 @@ namespace Jellyfin.Plugin.KinopoiskRu.Tests;
 [Collection("Sequential")]
 public class KpLocalMetadataTest : BaseTest
 {
-    private static readonly NLog.ILogger Logger = NLog.LogManager.GetLogger(nameof(KpLocalMetadataTest));
+    private static readonly NLog.ILogger Logger = NLog.LogManager.GetCurrentClassLogger();
 
     [Fact]
     public async void KpSeriesLocalMetadata_WithKpInName()

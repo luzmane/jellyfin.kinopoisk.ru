@@ -33,4 +33,17 @@ public abstract class BaseTest
         // _serverApplicationHost.VerifyNoOtherCalls();
     }
 
+    protected string GetKinopoiskDevToken()
+    {
+        var token = Environment.GetEnvironmentVariable("KINOPOISK_DEV_TOKEN");
+        _logger.Info($"Env token length is: {(token != null ? token.Length : 0)}");
+        return string.IsNullOrWhiteSpace(token) ? KINOPOISK_DEV_TOKEN : token;
+    }
+    protected string GetKinopoiskUnofficialToken()
+    {
+        var token = Environment.GetEnvironmentVariable("KINOPOISK_UNOFFICIAL_TOKEN");
+        _logger.Info($"Env token length is: {(token != null ? token.Length : 0)}");
+        return string.IsNullOrWhiteSpace(token) ? KINOPOISK_UNOFFICIAL_TOKEN : token;
+    }
+
 }
