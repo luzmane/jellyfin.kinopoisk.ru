@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model.Movie;
@@ -25,6 +26,8 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
     private readonly List<KpMovieType?> _movieTypes = new() { KpMovieType.Anime, KpMovieType.Movie, KpMovieType.Cartoon };
     // private readonly ICollectionManager _collectionManager;
     private readonly Plugin _pluginInstance;
+
+    private static readonly Regex HtmlTagRegex = new("<.+>", RegexOptions.Compiled);
 
     internal KinopoiskDevService(ILoggerFactory loggerFactory, IActivityManager activityManager)
     {
@@ -946,17 +949,20 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
 
     private static string? PrepareOverview(KpMovie movie)
     {
-        // TODO: remove tags, 0xa0 from overview
         var subj = "<br/><br/><b>Интересное:</b><br/>";
         StringBuilder sb = new(subj);
         movie.Facts?
-            .Where(f => !f.Spoiler && "FACT".Equals(f.Type, StringComparison.OrdinalIgnoreCase))
+            .Where(f =>
+                !f.Spoiler
+                && "FACT".Equals(f.Type, StringComparison.OrdinalIgnoreCase)
+                && !string.IsNullOrWhiteSpace(f.Value))
             .ToList()
-            .ForEach(f => sb.Append("&nbsp;&nbsp;&nbsp;&nbsp;* ").Append(f.Value).Append("<br/>"));
+            .ForEach(f =>
+                sb.Append("&nbsp;&nbsp;&nbsp;&nbsp;* ")
+                .Append(HtmlTagRegex.Replace(f.Value!, string.Empty))
+                .Append("<br/>"));
 
-        return (sb.Length == subj.Length)
-            ? movie.Description
-            : sb.Insert(0, movie.Description).ToString();
+        return (sb.Length == subj.Length) ? movie.Description : sb.Insert(0, movie.Description).ToString();
     }
 
     private List<KpMovie> FilterRelevantItems(List<KpMovie> list, string? name, int? year, string? alternativeName)
