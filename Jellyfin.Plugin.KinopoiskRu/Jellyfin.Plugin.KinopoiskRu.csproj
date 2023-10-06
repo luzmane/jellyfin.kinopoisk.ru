@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <DllVersion>1.0.0.0</DllVersion>
+    <DllVersion>1.1.0.0</DllVersion>
     <JellyfinVersion>10.8.11</JellyfinVersion>
   </PropertyGroup>
 
