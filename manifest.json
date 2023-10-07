@@ -1,7 +1,7 @@
 [
   {
     "guid": "0417364b-5a93-4ad0-a5f0-b8756957cf80",
-    "name": "KinopoiskRu",
+    "name": "Кинопоиск",
     "description": "Pull film/serial metadata from kinopoisk.ru",
     "overview": "Pull film/serial metadata from kinopoisk.ru",
     "owner": "luzmane",
