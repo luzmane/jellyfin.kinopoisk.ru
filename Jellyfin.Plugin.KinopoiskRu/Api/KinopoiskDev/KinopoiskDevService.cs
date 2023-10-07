@@ -27,7 +27,7 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
     // private readonly ICollectionManager _collectionManager;
     private readonly Plugin _pluginInstance;
 
-    private static readonly Regex HtmlTagRegex = new("<.+>", RegexOptions.Compiled);
+    private static readonly Regex HtmlTagRegex = new("<[^>]+>", RegexOptions.Compiled);
 
     internal KinopoiskDevService(ILoggerFactory loggerFactory, IActivityManager activityManager)
     {
