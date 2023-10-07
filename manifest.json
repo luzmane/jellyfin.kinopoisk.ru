@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/thumb.png",
     "versions": [
       {
+        "version": "1.1.2.0",
+        "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt",
+        "targetAbi": "10.8.11.0",
+        "sourceUrl": "https://github.com/luzmane/jellyfin.kinopoisk.ru/releases/download/v.1.1.2/KinopoiskRu-v.1.1.2.zip",
+        "checksum": "2c473f7334bf5db8d16eb20add267cfd",
+        "timestamp": "2023-10-07T08:15:08.0000000Z"
+      },
+      {
         "version": "1.1.1.0",
         "changelog": "https://raw.githubusercontent.com/luzmane/jellyfin.kinopoisk.ru/master/RELEASE-NOTES.txt",
         "targetAbi": "10.8.11.0",
