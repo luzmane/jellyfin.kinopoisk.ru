@@ -1,6 +1,7 @@
-v.1.1.0
+v.1.1.1
 - Remove html tags from film description
 - Optimize movie staff update
+- Fix meta.json to support auto update
 
 v.1.0.0
 - Initial release
