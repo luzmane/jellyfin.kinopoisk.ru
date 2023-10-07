@@ -26,7 +26,7 @@ public class KinopoiskDevApiTests : IDisposable
     [Fact]
     public async Task GetMovieById()
     {
-        var request = new Uri("https://api.kinopoisk.dev/v1.3/movie/689");
+        var request = new Uri("https://api.kinopoisk.dev/v1.3/movie/326");
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(request).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
