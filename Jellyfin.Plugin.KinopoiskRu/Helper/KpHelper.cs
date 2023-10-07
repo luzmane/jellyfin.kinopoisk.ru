@@ -5,6 +5,7 @@ using Jellyfin.Data.Entities;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model.Movie;
 
 using MediaBrowser.Model.Activity;
+using MediaBrowser.Model.Entities;
 
 namespace Jellyfin.Plugin.KinopoiskRu.Helper;
 
@@ -22,44 +23,32 @@ internal sealed class KpHelper
     private static readonly Dictionary<string, string> PersonTypeMap = new()
     {
         // KinopoiskDev
-        {"composer", "Композитор"},
-        {"designer", "Художник"},
-        {"director", "Режиссёр"},
-        {"editor", "Монтажёр"},
-        {"operator", "Оператор"},
-        {"producer", "Продюсер"},
-        {"voice_actor", "Актёр дубляжа"},
-        {"writer", "Сценарист"},
-        {"actor", "Актёр"},
+        {"composer", PersonType.Composer},
+        {"director", PersonType.Director},
+        {"producer", PersonType.Producer},
+        {"voice_actor", PersonType.Actor},
+        {"writer", PersonType.Writer},
+        {"actor", PersonType.Actor},
 
-        {"композиторы", "Композитор"},
-        {"художники", "Художник"},
-        {"режиссеры", "Режиссёр"},
-        {"монтажеры", "Монтажёр"},
-        {"операторы", "Оператор"},
-        {"продюсеры", "Продюсер"},
-        {"актеры дубляжа", "Актёр дубляжа"},
-        {"редакторы", "Сценарист"},
-        {"актеры", "Актёр"},
+        {"композиторы", PersonType.Composer},
+        {"режиссеры", PersonType.Director},
+        {"продюсеры", PersonType.Producer},
+        {"актеры дубляжа", PersonType.Actor},
+        {"редакторы", PersonType.Writer},
+        {"актеры", PersonType.Actor},
 
         // KinopoiskUnofficial
-        {"COMPOSER", "Композитор"},
-        {"DESIGN", "Художник"},
-        {"DIRECTOR", "Режиссёр"},
-        {"EDITOR", "Монтажёр"},
-        {"OPERATOR", "Оператор"},
-        {"PRODUCER", "Продюсер"},
-        {"WRITER", "Сценарист"},
-        {"ACTOR", "Актёр"},
+        {"COMPOSER", PersonType.Composer},
+        {"DIRECTOR", PersonType.Director},
+        {"PRODUCER", PersonType.Producer},
+        {"WRITER", PersonType.Writer},
+        {"ACTOR", PersonType.Actor},
 
-        {"Композиторы", "Композитор"},
-        {"Художники", "Художник"},
-        {"Режиссеры", "Режиссёр"},
-        {"Монтажеры", "Монтажёр"},
-        {"Операторы", "Оператор"},
-        {"Продюсеры", "Продюсер"},
-        {"Сценаристы", "Сценарист"},
-        {"Актеры", "Актёр"},
+        {"Композиторы", PersonType.Composer},
+        {"Режиссеры", PersonType.Director},
+        {"Продюсеры", PersonType.Producer},
+        {"Сценаристы", PersonType.Writer},
+        {"Актеры", PersonType.Actor},
     };
 
     internal static DateTime? GetPremierDate(KpPremiere? premiere)
