@@ -1,3 +1,7 @@
+v.1.1.2
+- Fix html tags remover
+- Fix PersonType detection
+
 v.1.1.1
 - Remove html tags from film description
 - Optimize movie staff update
