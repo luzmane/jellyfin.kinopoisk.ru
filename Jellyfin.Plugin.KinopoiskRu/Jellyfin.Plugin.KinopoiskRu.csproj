@@ -10,6 +10,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Jellyfin.Plugin.KinopoiskRu</RootNamespace>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <Version>$(DllVersion)</Version>
     <AssemblyVersion>$(DllVersion)</AssemblyVersion>

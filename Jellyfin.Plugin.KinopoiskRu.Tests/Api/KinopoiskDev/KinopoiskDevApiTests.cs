@@ -26,15 +26,15 @@ public class KinopoiskDevApiTests : IDisposable
     [Fact]
     public async Task GetMovieById()
     {
-        var request = new Uri("https://api.kinopoisk.dev/v1.3/movie/326");
+        var request = new Uri("https://api.kinopoisk.dev/v1.3/movie/435");
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(request).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
         KpMovie? kpMovie = JsonSerializer.Deserialize<KpMovie>(response, _jsonOptions);
         kpMovie.Should().NotBeNull();
         kpMovie!.AlternativeName.Should().Be("The Green Mile");
-        kpMovie.Backdrop?.Url.Should().Be("https://avatars.mds.yandex.net/get-ott/224348/2a00000169e39ef77f588ccdfe574dae8227/orig");
-        kpMovie.Backdrop?.PreviewUrl.Should().Be("https://avatars.mds.yandex.net/get-ott/224348/2a00000169e39ef77f588ccdfe574dae8227/x1000");
+        kpMovie.Backdrop?.Url.Should().Be("https://imagetmdb.com/t/p/original/l6hQWH9eDksNJNiXWYRkWqikOdu.jpg");
+        kpMovie.Backdrop?.PreviewUrl.Should().Be("https://imagetmdb.com/t/p/w500/l6hQWH9eDksNJNiXWYRkWqikOdu.jpg");
         kpMovie.Countries?.Count.Should().Be(1);
         kpMovie.Description.Should().Be("Пол Эджкомб — начальник блока смертников в тюрьме «Холодная гора», каждый из узников которого однажды проходит «зеленую милю» по пути к месту казни. Пол повидал много заключённых и надзирателей за время работы. Однако гигант Джон Коффи, обвинённый в страшном преступлении, стал одним из самых необычных обитателей блока.");
         kpMovie.ExternalId?.Imdb.Should().Be("tt0120689");
@@ -44,16 +44,16 @@ public class KinopoiskDevApiTests : IDisposable
         kpMovie.Logo?.Url.Should().Be("https://avatars.mds.yandex.net/get-ott/239697/2a0000016f12f1eb8870b609ee94313774b2/orig");
         kpMovie.MovieLength.Should().Be(189);
         kpMovie.Name.Should().Be("Зеленая миля");
-        kpMovie.Persons?.Count.Should().Be(87);
-        kpMovie.Poster?.Url.Should().Be("https://st.kp.yandex.net/images/film_big/435.jpg");
-        kpMovie.Poster?.PreviewUrl.Should().Be("https://st.kp.yandex.net/images/film_iphone/iphone360_435.jpg");
+        kpMovie.Persons?.Count.Should().Be(26);
+        kpMovie.Poster?.Url.Should().Be("https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/4057c4b8-8208-4a04-b169-26b0661453e3/orig");
+        kpMovie.Poster?.PreviewUrl.Should().Be("https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/4057c4b8-8208-4a04-b169-26b0661453e3/x1000");
         kpMovie.Premiere?.World.Should().Be("1999-12-06T00:00:00.000Z");
         kpMovie.ProductionCompanies?.Count.Should().Be(4);
         kpMovie.Rating?.Kp.Should().NotBeNull("");
         kpMovie.RatingMpaa.Should().Be("r");
         kpMovie.Slogan.Should().Be("Пол Эджкомб не верил в чудеса. Пока не столкнулся с одним из них");
         kpMovie.Videos?.Teasers.Count.Should().Be(0);
-        kpMovie.Videos?.Trailers.Count.Should().Be(2);
+        kpMovie.Videos?.Trailers.Count.Should().Be(0);
         kpMovie.Year.Should().Be(1999);
         kpMovie.Facts?.Count.Should().Be(21);
         kpMovie.SequelsAndPrequels?.Count.Should().Be(0);
