@@ -1,6 +1,7 @@
 using FluentAssertions;
 
 using Jellyfin.Plugin.KinopoiskRu.Provider.LocalMetadata;
+using Jellyfin.Plugin.KinopoiskRu.Tests.Utils;
 
 using MediaBrowser.Controller.Entities.TV;
 

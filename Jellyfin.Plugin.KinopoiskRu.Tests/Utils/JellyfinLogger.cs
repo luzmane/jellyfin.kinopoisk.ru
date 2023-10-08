@@ -1,4 +1,4 @@
-namespace Jellyfin.Plugin.KinopoiskRu;
+namespace Jellyfin.Plugin.KinopoiskRu.Tests.Utils;
 
 public class JellyfinLogger<T> : ILogger<T>
 {
