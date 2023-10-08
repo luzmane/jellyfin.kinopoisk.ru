@@ -4,7 +4,7 @@ internal sealed class KpEpisode
 {
     public string? EnName { get; set; }
 
-    public string? Date { get; set; }
+    public string? AirDate { get; set; }
 
     public string? Description { get; set; }
 

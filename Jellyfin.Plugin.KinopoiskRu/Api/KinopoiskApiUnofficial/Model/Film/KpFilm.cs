@@ -36,9 +36,9 @@ internal sealed class KpFilm
 
     public string? RatingMpaa { get; set; }
 
-    public List<KpCountry> Countries { get; } = new();
+    public List<KpCountry> Countries { get; set; } = new();
 
-    public List<KpGenre> Genres { get; } = new();
+    public List<KpGenre> Genres { get; set; } = new();
 
     private string DebuggerDisplay => $"#{KinopoiskId}, {NameRu}";
 }

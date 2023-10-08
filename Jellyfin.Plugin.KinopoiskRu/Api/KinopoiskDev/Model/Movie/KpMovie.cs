@@ -41,7 +41,7 @@ internal sealed class KpMovie
 
     public List<KpYearRange> ReleaseYears { get; set; } = new();
 
-    public List<KpSequel> SequelsAndPrequels { get; } = new();
+    public List<KpSequel> SequelsAndPrequels { get; set; } = new();
 
     public string? Slogan { get; set; }
 

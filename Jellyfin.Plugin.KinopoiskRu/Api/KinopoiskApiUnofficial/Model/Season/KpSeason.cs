@@ -4,5 +4,5 @@ internal sealed class KpSeason
 {
     public int Number { get; set; }
 
-    public List<KpEpisode> Episodes { get; } = new();
+    public List<KpEpisode> Episodes { get; set; } = new();
 }

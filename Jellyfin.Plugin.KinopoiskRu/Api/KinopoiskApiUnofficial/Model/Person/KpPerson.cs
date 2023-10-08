@@ -21,5 +21,5 @@ internal sealed class KpPerson
 
     public string? DeathPlace { get; set; }
 
-    public List<string> Facts { get; } = new();
+    public List<string> Facts { get; set; } = new();
 }

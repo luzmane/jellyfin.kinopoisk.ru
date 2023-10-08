@@ -516,12 +516,11 @@ internal sealed class KinopoiskDevService : IKinopoiskRuService
             return result;
         }
 
-        _ = DateTime.TryParseExact(
-            kpEpisode.Date,
-            "yyyy-MM-dd'T'HH:mm:ss.fffZ",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.None,
-            out DateTime premiereDate);
+        DateTime? premiereDate = null;
+        if (DateTime.TryParseExact(kpEpisode.AirDate, "yyyy-MM-dd'T'HH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime tmp))
+        {
+            premiereDate = tmp;
+        }
         result.Item = new Episode()
         {
             Name = kpEpisode.Name,
