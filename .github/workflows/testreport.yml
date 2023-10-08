@@ -7,9 +7,8 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "master" ]
   workflow_dispatch:
-  # TODO: uncomment me
-  # schedule:
-  #   - cron: '45 11 9 * *'
+  schedule:
+    - cron: '15 00 20 * *'
 
 jobs:
   test:
