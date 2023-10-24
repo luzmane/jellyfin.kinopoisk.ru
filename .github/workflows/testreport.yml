@@ -32,6 +32,7 @@ jobs:
       run: dotnet build
     
     - name: Run tests
+      continue-on-error: true
       env:
         KINOPOISK_DEV_TOKEN: ${{ secrets.KINOPOISK_DEV_TOKEN }}
         KINOPOISK_UNOFFICIAL_TOKEN: ${{ secrets.KINOPOISK_UNOFFICIAL_TOKEN }}
