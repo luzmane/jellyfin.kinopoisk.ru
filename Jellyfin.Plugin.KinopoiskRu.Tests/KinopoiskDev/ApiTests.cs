@@ -1,11 +1,10 @@
-using System.Text.Json;
-
 using FluentAssertions;
 
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model.Movie;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model.Person;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskDev.Model.Season;
+using Jellyfin.Plugin.KinopoiskRu.Helper;
 
 namespace Jellyfin.Plugin.KinopoiskRu.Tests.KinopoiskDev;
 
@@ -20,7 +19,6 @@ public class ApiTests : IDisposable
     private const string KINOPOISK_DEV_TOKEN = "8DA0EV2-KTP4A5Q-G67QP3K-S2VFBX7";
 
     private readonly HttpClient _httpClient;
-    private readonly JsonSerializerOptions _jsonOptions;
     private readonly NLog.ILogger _logger;
 
 
@@ -30,8 +28,6 @@ public class ApiTests : IDisposable
 
         _httpClient = new();
         _httpClient.DefaultRequestHeaders.Add("X-API-KEY", GetKinopoiskDevToken());
-
-        _jsonOptions = new() { PropertyNameCaseInsensitive = true };
     }
 
     [Fact]
@@ -41,7 +37,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(request).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpMovie? kpMovie = JsonSerializer.Deserialize<KpMovie>(response, _jsonOptions);
+        KpMovie? kpMovie = JsonHelper.Deserialize<KpMovie>(response);
         kpMovie.Should().NotBeNull("should find and desiralize something");
         kpMovie!.AlternativeName.Should().Be("The Green Mile");
         kpMovie.Backdrop?.Url.Should().Be("https://imagetmdb.com/t/p/original/l6hQWH9eDksNJNiXWYRkWqikOdu.jpg");
@@ -81,7 +77,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpMovie>? searchResultMovie = JsonSerializer.Deserialize<KpSearchResult<KpMovie>>(response, _jsonOptions);
+        KpSearchResult<KpMovie>? searchResultMovie = JsonHelper.Deserialize<KpSearchResult<KpMovie>>(response);
         searchResultMovie.Should().NotBeNull("should find and desiralize something");
         searchResultMovie!.Docs.Count.Should().Be(2);
 
@@ -155,7 +151,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpMovie>? searchResultMovie = JsonSerializer.Deserialize<KpSearchResult<KpMovie>>(response, _jsonOptions);
+        KpSearchResult<KpMovie>? searchResultMovie = JsonHelper.Deserialize<KpSearchResult<KpMovie>>(response);
         searchResultMovie.Should().NotBeNull();
         searchResultMovie!.Docs.Should().ContainSingle();
         KpMovie kpMovie = searchResultMovie!.Docs[0];
@@ -198,7 +194,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpMovie>? searchResultMovie = JsonSerializer.Deserialize<KpSearchResult<KpMovie>>(response, _jsonOptions);
+        KpSearchResult<KpMovie>? searchResultMovie = JsonHelper.Deserialize<KpSearchResult<KpMovie>>(response);
         searchResultMovie.Should().NotBeNull();
         searchResultMovie!.Docs.Should().ContainSingle();
         KpMovie kpMovie = searchResultMovie!.Docs[0];
@@ -240,7 +236,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpMovie>? kpMovie = JsonSerializer.Deserialize<KpSearchResult<KpMovie>>(response, _jsonOptions);
+        KpSearchResult<KpMovie>? kpMovie = JsonHelper.Deserialize<KpSearchResult<KpMovie>>(response);
         kpMovie.Should().NotBeNull();
         kpMovie!.Docs.Count.Should().Be(250);
     }
@@ -255,7 +251,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpMovie>? searchResultMovie = JsonSerializer.Deserialize<KpSearchResult<KpMovie>>(response, _jsonOptions);
+        KpSearchResult<KpMovie>? searchResultMovie = JsonHelper.Deserialize<KpSearchResult<KpMovie>>(response);
         searchResultMovie.Should().NotBeNull();
         searchResultMovie!.Docs.Count.Should().Be(2);
 
@@ -281,7 +277,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpPerson? kpPerson = JsonSerializer.Deserialize<KpPerson>(response, _jsonOptions);
+        KpPerson? kpPerson = JsonHelper.Deserialize<KpPerson>(response);
         kpPerson.Should().NotBeNull();
         kpPerson!.Birthday.Should().Be("1958-10-16T00:00:00.000Z");
         kpPerson.BirthPlace?.Count.Should().Be(3);
@@ -302,7 +298,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpPerson>? searchResultKpPerson = JsonSerializer.Deserialize<KpSearchResult<KpPerson>>(response, _jsonOptions);
+        KpSearchResult<KpPerson>? searchResultKpPerson = JsonHelper.Deserialize<KpSearchResult<KpPerson>>(response);
         searchResultKpPerson.Should().NotBeNull();
         searchResultKpPerson!.Docs.Count.Should().Be(2);
         KpPerson kpPerson = searchResultKpPerson.Docs[0];
@@ -321,7 +317,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpPerson>? searchResultKpPerson = JsonSerializer.Deserialize<KpSearchResult<KpPerson>>(response, _jsonOptions);
+        KpSearchResult<KpPerson>? searchResultKpPerson = JsonHelper.Deserialize<KpSearchResult<KpPerson>>(response);
         searchResultKpPerson.Should().NotBeNull();
         searchResultKpPerson!.Docs.Count.Should().BeGreaterThan(50);
         KpPerson? kpPerson = searchResultKpPerson.Docs.FirstOrDefault(i => i.Id == 7987);
@@ -340,7 +336,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpSeason>? searchResultKpSeason = JsonSerializer.Deserialize<KpSearchResult<KpSeason>>(response, _jsonOptions);
+        KpSearchResult<KpSeason>? searchResultKpSeason = JsonHelper.Deserialize<KpSearchResult<KpSeason>>(response);
         searchResultKpSeason.Should().NotBeNull();
         searchResultKpSeason!.Docs.RemoveAll(x => x.EpisodesCount == 0);
         searchResultKpSeason!.Docs.Count.Should().Be(10);

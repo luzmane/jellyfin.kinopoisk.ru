@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model.Film;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model.Person;
@@ -33,7 +31,7 @@ internal sealed class KinopoiskUnofficialApi
 
         var url = $"https://kinopoiskapiunofficial.tech/api/v2.2/films/{movieId}";
         var response = await SendRequest(url, cancellationToken).ConfigureAwait(false);
-        return string.IsNullOrEmpty(response) ? null : JsonSerializer.Deserialize<KpFilm>(response);
+        return string.IsNullOrEmpty(response) ? null : JsonHelper.Deserialize<KpFilm>(response);
     }
 
     internal async Task<KpSearchResult<KpFilm>> GetFilmsByNameAndYear(string name, int? year, CancellationToken cancellationToken)
@@ -48,7 +46,7 @@ internal sealed class KinopoiskUnofficialApi
         {
             var request = url + namePart + yearPart;
             var response = await SendRequest(request, cancellationToken).ConfigureAwait(false);
-            KpSearchResult<KpFilm>? toReturn = JsonSerializer.Deserialize<KpSearchResult<KpFilm>>(response);
+            KpSearchResult<KpFilm>? toReturn = JsonHelper.Deserialize<KpSearchResult<KpFilm>>(response);
             if (toReturn != null && toReturn.Items.Count > 0)
             {
                 _logger.LogInformation("Found {ToReturnItemsCount} movies", toReturn.Items.Count);
@@ -60,7 +58,7 @@ internal sealed class KinopoiskUnofficialApi
         {
             var request = url + namePart;
             var response = await SendRequest(request, cancellationToken).ConfigureAwait(false);
-            KpSearchResult<KpFilm>? toReturn = JsonSerializer.Deserialize<KpSearchResult<KpFilm>>(response);
+            KpSearchResult<KpFilm>? toReturn = JsonHelper.Deserialize<KpSearchResult<KpFilm>>(response);
             if (toReturn != null && toReturn.Items.Count > 0)
             {
                 _logger.LogInformation("Found {ToReturnItemsCount} movies", toReturn.Items.Count);
@@ -75,35 +73,35 @@ internal sealed class KinopoiskUnofficialApi
     {
         var url = $"https://kinopoiskapiunofficial.tech/api/v1/staff?filmId={movieId}";
         var response = await SendRequest(url, cancellationToken).ConfigureAwait(false);
-        return string.IsNullOrEmpty(response) ? null : JsonSerializer.Deserialize<List<KpFilmStaff>>(response);
+        return string.IsNullOrEmpty(response) ? null : JsonHelper.Deserialize<List<KpFilmStaff>>(response);
     }
 
     internal async Task<KpSearchResult<KpVideo>?> GetVideosByFilmId(string movieId, CancellationToken cancellationToken)
     {
         var url = $"https://kinopoiskapiunofficial.tech/api/v2.2/films/{movieId}/videos";
         var response = await SendRequest(url, cancellationToken).ConfigureAwait(false);
-        return string.IsNullOrEmpty(response) ? null : JsonSerializer.Deserialize<KpSearchResult<KpVideo>>(response);
+        return string.IsNullOrEmpty(response) ? null : JsonHelper.Deserialize<KpSearchResult<KpVideo>>(response);
     }
 
     internal async Task<KpSearchResult<KpSeason>?> GetEpisodesBySeriesId(string seriesId, CancellationToken cancellationToken)
     {
         var url = $"https://kinopoiskapiunofficial.tech/api/v2.2/films/{seriesId}/seasons";
         var response = await SendRequest(url, cancellationToken).ConfigureAwait(false);
-        return string.IsNullOrEmpty(response) ? null : JsonSerializer.Deserialize<KpSearchResult<KpSeason>>(response);
+        return string.IsNullOrEmpty(response) ? null : JsonHelper.Deserialize<KpSearchResult<KpSeason>>(response);
     }
 
     internal async Task<KpPerson?> GetPersonById(string personId, CancellationToken cancellationToken)
     {
         var url = $"https://kinopoiskapiunofficial.tech/api/v1/staff/{personId}";
         var response = await SendRequest(url, cancellationToken).ConfigureAwait(false);
-        return string.IsNullOrEmpty(response) ? null : JsonSerializer.Deserialize<KpPerson>(response);
+        return string.IsNullOrEmpty(response) ? null : JsonHelper.Deserialize<KpPerson>(response);
     }
 
     internal async Task<KpSearchResult<KpStaff>?> GetPersonsByName(string name, CancellationToken cancellationToken)
     {
         var url = $"https://kinopoiskapiunofficial.tech/api/v1/persons?name={name}";
         var response = await SendRequest(url, cancellationToken).ConfigureAwait(false);
-        return string.IsNullOrEmpty(response) ? null : JsonSerializer.Deserialize<KpSearchResult<KpStaff>>(response);
+        return string.IsNullOrEmpty(response) ? null : JsonHelper.Deserialize<KpSearchResult<KpStaff>>(response);
     }
 
     internal async Task<KpSearchResult<KpFilm>> GetFilmByImdbId(string? imdbMovieId, CancellationToken cancellationToken)
@@ -114,7 +112,7 @@ internal sealed class KinopoiskUnofficialApi
         if (hasImdb)
         {
             var response = await SendRequest(request, cancellationToken).ConfigureAwait(false);
-            KpSearchResult<KpFilm>? toReturn = JsonSerializer.Deserialize<KpSearchResult<KpFilm>>(response);
+            KpSearchResult<KpFilm>? toReturn = JsonHelper.Deserialize<KpSearchResult<KpFilm>>(response);
             if (toReturn != null && toReturn.Items.Count > 0)
             {
                 _logger.LogInformation("Found {ToReturnItemsCount} items", toReturn.Items.Count);

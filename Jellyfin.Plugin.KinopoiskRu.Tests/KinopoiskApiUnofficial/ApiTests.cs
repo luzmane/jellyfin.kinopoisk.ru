@@ -1,11 +1,10 @@
-using System.Text.Json;
-
 using FluentAssertions;
 
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model.Film;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model.Person;
 using Jellyfin.Plugin.KinopoiskRu.Api.KinopoiskApiUnofficial.Model.Season;
+using Jellyfin.Plugin.KinopoiskRu.Helper;
 
 namespace Jellyfin.Plugin.KinopoiskRu.Tests.KinopoiskApiUnofficial;
 
@@ -13,7 +12,6 @@ public class ApiTests : IDisposable
 {
     private const string KINOPOISK_UNOFFICIAL_TOKEN = "0f162131-81c1-4979-b46c-3eea4263fb11";
     private readonly HttpClient _httpClient;
-    private readonly JsonSerializerOptions _jsonOptions;
     private readonly NLog.ILogger _logger;
 
     public ApiTests()
@@ -22,8 +20,6 @@ public class ApiTests : IDisposable
 
         _httpClient = new();
         _httpClient.DefaultRequestHeaders.Add("X-API-KEY", GetKinopoiskUnofficialToken());
-
-        _jsonOptions = new() { PropertyNameCaseInsensitive = true };
     }
 
     [Fact]
@@ -33,7 +29,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpFilm? film = JsonSerializer.Deserialize<KpFilm>(response, _jsonOptions);
+        KpFilm? film = JsonHelper.Deserialize<KpFilm>(response);
         film.Should().NotBeNull();
         film!.Countries?.Count.Should().Be(1);
         film.CoverUrl.Should().Be("https://avatars.mds.yandex.net/get-ott/1652588/2a00000186aca5e13ea6cec11d584ac5455b/orig");
@@ -60,7 +56,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpSeason>? seasons = JsonSerializer.Deserialize<KpSearchResult<KpSeason>>(response, _jsonOptions);
+        KpSearchResult<KpSeason>? seasons = JsonHelper.Deserialize<KpSearchResult<KpSeason>>(response);
         seasons.Should().NotBeNull();
         seasons!.Items.Count.Should().Be(10);
         KpSeason kpSeason = seasons.Items[0];
@@ -80,7 +76,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpVideo>? videos = JsonSerializer.Deserialize<KpSearchResult<KpVideo>>(response, _jsonOptions);
+        KpSearchResult<KpVideo>? videos = JsonHelper.Deserialize<KpSearchResult<KpVideo>>(response);
         videos.Should().NotBeNull();
         videos!.Items.Count.Should().Be(8);
         KpVideo kpVideo = videos.Items[0];
@@ -94,7 +90,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpPerson? kpPerson = JsonSerializer.Deserialize<KpPerson>(response, _jsonOptions);
+        KpPerson? kpPerson = JsonHelper.Deserialize<KpPerson>(response);
         kpPerson.Should().NotBeNull();
         kpPerson!.Birthday.Should().Be("1958-10-16");
         kpPerson.BirthPlace.Should().Be("Уэст-Ковина, Калифорния, США");
@@ -114,7 +110,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        List<KpFilmStaff>? filmStaffList = JsonSerializer.Deserialize<List<KpFilmStaff>>(response, _jsonOptions);
+        List<KpFilmStaff>? filmStaffList = JsonHelper.Deserialize<List<KpFilmStaff>>(response);
         filmStaffList.Should().NotBeNull();
         filmStaffList!.Count.Should().Be(90);
         KpFilmStaff filmStaff = filmStaffList[1];
@@ -133,7 +129,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpFilm>? filmSearchResult = JsonSerializer.Deserialize<KpSearchResult<KpFilm>>(response, _jsonOptions);
+        KpSearchResult<KpFilm>? filmSearchResult = JsonHelper.Deserialize<KpSearchResult<KpFilm>>(response);
         filmSearchResult.Should().NotBeNull();
         filmSearchResult!.Items.Count.Should().Be(3);
         KpFilm film = filmSearchResult.Items.First(f => f.KinopoiskId == 933277);
@@ -157,7 +153,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpFilm>? filmSearchResult = JsonSerializer.Deserialize<KpSearchResult<KpFilm>>(response, _jsonOptions);
+        KpSearchResult<KpFilm>? filmSearchResult = JsonHelper.Deserialize<KpSearchResult<KpFilm>>(response);
         filmSearchResult.Should().NotBeNull();
         filmSearchResult!.Items.Count.Should().Be(1);
         KpFilm film = filmSearchResult.Items.First(f => f.KinopoiskId == 933277);
@@ -181,7 +177,7 @@ public class ApiTests : IDisposable
         using HttpResponseMessage responseMessage = await _httpClient.GetAsync(new Uri(request)).ConfigureAwait(false);
         _ = responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-        KpSearchResult<KpStaff>? staffSearchResult = JsonSerializer.Deserialize<KpSearchResult<KpStaff>>(response, _jsonOptions);
+        KpSearchResult<KpStaff>? staffSearchResult = JsonHelper.Deserialize<KpSearchResult<KpStaff>>(response);
         staffSearchResult.Should().NotBeNull();
         staffSearchResult!.Items.Count.Should().Be(4);
         KpStaff staff = staffSearchResult.Items.First(f => f.KinopoiskId == 7987);
