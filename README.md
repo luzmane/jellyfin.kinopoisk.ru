@@ -1,3 +1,5 @@
+# The plugin will no longer be updated
+
 # jellyfin.kinopoisk.ru
 
 Fetches metadata from [kinopoisk.ru](https://www.kinopoisk.ru). This site is popular in the Russian-speaking community and contains almost no English-language information, so further description will be in Russian.
